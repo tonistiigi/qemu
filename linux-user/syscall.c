@@ -11607,6 +11607,13 @@ static abi_long do_syscall1(void *cpu_env, int num, abi_long arg1,
         }
         return ret;
 #endif
+    case TARGET_NR_copy_file_range:
+	// TODO(docker)
+	return -TARGET_EINVAL;
+    case TARGET_NR_keyctl:
+	// TODO(docker)
+	#define YOLO 0
+	return YOLO;
     default:
         qemu_log_mask(LOG_UNIMP, "Unsupported syscall: %d\n", num);
         return -TARGET_ENOSYS;

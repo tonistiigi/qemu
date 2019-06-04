@@ -56,6 +56,7 @@
 #include <linux/errqueue.h>
 #include <linux/random.h>
 #include "qemu-common.h"
+#include "syscall_orphans.h"
 #ifdef CONFIG_TIMERFD
 #include <sys/timerfd.h>
 #endif
@@ -7624,6 +7625,20 @@ static abi_long do_syscall1(void *cpu_env, int num, abi_long arg1,
         return get_errno(setpgid(arg1, arg2));
     case TARGET_NR_umask:
         return get_errno(umask(arg1));
+    case TARGET_NR_pivot_root:
+	{
+            void *p2;
+            p  = lock_user_string(arg1);
+            p2 = lock_user_string(arg2);
+            if (!p || !p2) {
+                ret = -TARGET_EFAULT;
+            } else {
+                ret = get_errno(pivot_root(p, p2));
+            }
+            unlock_user(p2, arg2, 0);
+            unlock_user(p, arg1, 0);
+        }
+        return ret;
     case TARGET_NR_chroot:
         if (!(p = lock_user_string(arg1)))
             return -TARGET_EFAULT;

@@ -699,7 +699,8 @@ int main(int argc, char **argv, char **envp)
     }
 
     if (cpu_model == NULL) {
-        cpu_model = cpu_get_model(get_elf_eflags(execfd));
+        //cpu_model = cpu_get_model(get_elf_eflags(execfd));
+        cpu_model = "max";
     }
     cpu_type = parse_cpu_option(cpu_model);
 
